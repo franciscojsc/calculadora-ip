@@ -307,7 +307,14 @@ window.onload = function () {
                 resultQtdRede.innerHTML = "<hr /><h5>Quantidade de rede/sub-rede</h5><h5>" + calcularSubrede(ipBinario, mascaraBinario).toString() + "</h5>";
                 resultQtdHost.innerHTML = "<hr /><h5>Quantidade de host por rede/sub-rede</h5><h5>" + calcularHost(mascaraBinario).toString() + "</h5>";
 
+            else{
+                var resultClasse = document.getElementById("resultadoClasse");
+                resultClasse.innerHTML = "<hr /><h3 style='color:red' >Verifique a máscara</h3>";
             }
+        }else{
+            var resultClasse = document.getElementById("resultadoClasse");
+            resultClasse.innerHTML = "<hr /><h3 style='color:red' >Verifique o IP</h3>";
         }
+        
     };
 };
