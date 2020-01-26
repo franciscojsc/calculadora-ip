@@ -8,12 +8,12 @@ window.onload = function () {
 
     //verificar se está faltando digitos para completa o octeto
     function verificarOcteto(octeto) {
-        var octetoAux = new String(octeto);
+        let octetoAux = new String(octeto);
 
-        var diferenca = Math.abs(octetoAux.length - 8);
+        const diferenca = Math.abs(octetoAux.length - 8);
 
         if (octetoAux.length < 8) {
-            for (var i = 0; i < diferenca; i++) {
+            for (let i = 0; i < diferenca; i++) {
                 octetoAux = "0" + octetoAux;
             }
         }
@@ -22,7 +22,7 @@ window.onload = function () {
 
     //verificar a classe ip, mas precisa da forma binária
     function verificarClasseIp(primeiroOcteto) {
-        var aux = new String(primeiroOcteto);
+        const aux = new String(primeiroOcteto);
 
         if (aux.slice(0, 1) == "0") {
             return "A";
@@ -42,9 +42,9 @@ window.onload = function () {
     }
 
     function verificarRede(ip, mascara) {
-        var rede = new String();
+        let rede = new String();
 
-        for (var i = 0; i < 35; i++) {
+        for (let i = 0; i < 35; i++) {
             //operção AND entre ip e máscara
             if (ip.charAt(i) == '1' && mascara.charAt(i) == '1') {
                 rede += "1"
@@ -59,9 +59,9 @@ window.onload = function () {
     }
 
     function verificarBroadcast(ip, mascara) {
-        var notMascara = new String();
+        let notMascara = new String();
 
-        for (var i = 0; i < 35; i++) {
+        for (let i = 0; i < 35; i++) {
             //operção NOT na máscara
             if (mascara.charAt(i) == '1') {
                 notMascara += "0"
@@ -72,9 +72,9 @@ window.onload = function () {
             }
         }
 
-        var broadcast = new String();
+        let broadcast = new String();
 
-        for (var i = 0; i < 35; i++) {
+        for (let i = 0; i < 35; i++) {
             //operção OR entre ip e o not da máscara
             if ((notMascara.charAt(i) == '1' && ip.charAt(i) == '1') || (notMascara.charAt(i) == '0' && ip.charAt(i) == '1') || (notMascara.charAt(i) == '1' && ip.charAt(i) == '0')) {
                 broadcast += "1"
@@ -91,10 +91,10 @@ window.onload = function () {
     function notacaoCIDR(mascara) {
         // exemplo /24
 
-        var mascaraCIDR = new String();
+        let mascaraCIDR = new String();
 
         if (verificarNotacaoCIDR(mascara)) {
-            for (var i = 0; i < 35; i++) {
+            for (let i = 0; i < 35; i++) {
                 if (i == 8 || i == 17 || i == 26) {
                     mascaraCIDR += ".";
                     continue;
@@ -133,9 +133,9 @@ window.onload = function () {
     }
 
     function qtdBitsLigado(mascara) {
-        var aux = 0;
+        let aux = 0;
 
-        for (var i = 0; i < 35; i++) {
+        for (let i = 0; i < 35; i++) {
             if (mascara[i] == 1) {
                 aux++;
             }
@@ -148,9 +148,9 @@ window.onload = function () {
     }
 
     function qtdBitsDesligado(mascara) {
-        var aux = 0;
+        let aux = 0;
 
-        for (var i = 0; i < 35; i++) {
+        for (let i = 0; i < 35; i++) {
             if (mascara[i] == 0) {
                 aux++;
             }
@@ -160,7 +160,7 @@ window.onload = function () {
 
     function validarIp(ip, ipbase10) {
 
-        var regExp = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
+        const regExp = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
 
         if (regExp.test(ip)) {
             if (ipbase10[0] == 0) {
@@ -181,7 +181,7 @@ window.onload = function () {
     }
 
     function validarMascara(octeto1IP, mascara) {
-        var regExp = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
+        const regExp = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
 
         if (regExp.test(unir(mascara[0], mascara[1], mascara[2], mascara[3]))) {
             switch (verificarClasseIp(octeto1IP)) {
@@ -243,63 +243,63 @@ window.onload = function () {
     }
 
     function converteDecimal(binario) {
-        var binarioSeparado = separarOcteto(binario);
-        var decimal = new Array();
+        const binarioSeparado = separarOcteto(binario);
+        const decimal = new Array();
 
-        for (var i = 0; i < binarioSeparado.length; i++) {
+        for (let i = 0; i < binarioSeparado.length; i++) {
             decimal.push(parseInt(binarioSeparado[i], 2).toString());
         }
         return unir(decimal[0], decimal[1], decimal[2], decimal[3]);
     }
 
-    //var ip = "192.168.64.1";
-    //var mascara = "255.255.255.0";
-    //var cidr = "24"
+    //const ip = "192.168.64.1";
+    //const mascara = "255.255.255.0";
+    //const cidr = "24"
 
     // ----- Campos do index.html -----
-    var botao = document.getElementById("botao");
-    var resultado = document.getElementById("resultado")
+    const botao = document.getElementById("botao");
+    const resultado = document.getElementById("resultado")
     // --------------------------------
 
     botao.onclick = function () {
         // ----- Campos do index.html -----
-        var ip = document.getElementById("ip").value;
-        var mascara = document.getElementById("mascara").value;
-        var cidr = document.getElementById("mascaraCIDR").value;
+        const ip = document.getElementById("ip").value;
+        const mascara = document.getElementById("mascara").value;
+        const cidr = document.getElementById("mascaraCIDR").value;
         // --------------------------------
 
         if (!mascara) {
             mascara = converteDecimal(notacaoCIDR(cidr));
         }
 
-        var ipDecimal = separarOcteto(ip);
-        var mascaraDecimal = separarOcteto(mascara);
+        const ipDecimal = separarOcteto(ip);
+        const mascaraDecimal = separarOcteto(mascara);
 
         // converte ip em binário 
-        var octeto1ip = verificarOcteto(parseInt(ipDecimal[0]).toString(2));
-        var octeto2ip = verificarOcteto(parseInt(ipDecimal[1]).toString(2));
-        var octeto3ip = verificarOcteto(parseInt(ipDecimal[2]).toString(2));
-        var octeto4ip = verificarOcteto(parseInt(ipDecimal[3]).toString(2));
+        const octeto1ip = verificarOcteto(parseInt(ipDecimal[0]).toString(2));
+        const octeto2ip = verificarOcteto(parseInt(ipDecimal[1]).toString(2));
+        const octeto3ip = verificarOcteto(parseInt(ipDecimal[2]).toString(2));
+        const octeto4ip = verificarOcteto(parseInt(ipDecimal[3]).toString(2));
 
         // converte máscara em binário 
-        var octeto1mascara = verificarOcteto(parseInt(mascaraDecimal[0]).toString(2));
-        var octeto2mascara = verificarOcteto(parseInt(mascaraDecimal[1]).toString(2));
-        var octeto3mascara = verificarOcteto(parseInt(mascaraDecimal[2]).toString(2));
-        var octeto4mascara = verificarOcteto(parseInt(mascaraDecimal[3]).toString(2));
+        const octeto1mascara = verificarOcteto(parseInt(mascaraDecimal[0]).toString(2));
+        const octeto2mascara = verificarOcteto(parseInt(mascaraDecimal[1]).toString(2));
+        const octeto3mascara = verificarOcteto(parseInt(mascaraDecimal[2]).toString(2));
+        const octeto4mascara = verificarOcteto(parseInt(mascaraDecimal[3]).toString(2));
 
-        var ipBinario = unir(octeto1ip, octeto2ip, octeto3ip, octeto4ip);
-        var mascaraBinario = unir(octeto1mascara, octeto2mascara, octeto3mascara, octeto4mascara);
+        const ipBinario = unir(octeto1ip, octeto2ip, octeto3ip, octeto4ip);
+        const mascaraBinario = unir(octeto1mascara, octeto2mascara, octeto3mascara, octeto4mascara);
 
         if (validarIp(ip, ipDecimal)) {
             if (validarMascara(octeto1ip, mascaraDecimal)) {
 
-                var resultClasse = document.getElementById("resultadoClasse");
-                var resultIP = document.getElementById("resultadoIP");
-                var resultMascara = document.getElementById("resultadoMascara");
-                var resultRede = document.getElementById("resultadoRede");
-                var resultBroadcast = document.getElementById("resultadoBroadcast");
-                var resultQtdRede = document.getElementById("resultadoQtdRede");
-                var resultQtdHost = document.getElementById("resultadoQtdHost");
+                const resultClasse = document.getElementById("resultadoClasse");
+                const resultIP = document.getElementById("resultadoIP");
+                const resultMascara = document.getElementById("resultadoMascara");
+                const resultRede = document.getElementById("resultadoRede");
+                const resultBroadcast = document.getElementById("resultadoBroadcast");
+                const resultQtdRede = document.getElementById("resultadoQtdRede");
+                const resultQtdHost = document.getElementById("resultadoQtdHost");
 
                 resultClasse.innerHTML = "<hr /><h5>Classe IP</h5><h5>" + verificarClasseIp(octeto1ip) + "</h5>";
                 resultIP.innerHTML = "<hr /><h5>Endereço IP</h5><h5>" + ip + "</h5><h5>" + ipBinario.toString() + "</h5>";
@@ -310,11 +310,11 @@ window.onload = function () {
                 resultQtdHost.innerHTML = "<hr /><h5>Quantidade de host por rede/sub-rede</h5><h5>" + calcularHost(mascaraBinario).toString() + "</h5>";
 
             } else {
-                var resultClasse = document.getElementById("resultadoClasse");
+                const resultClasse = document.getElementById("resultadoClasse");
                 resultClasse.innerHTML = "<hr /><h3 style='color:red' >Verifique a máscara</h3>";
             }
         } else {
-            var resultClasse = document.getElementById("resultadoClasse");
+            const resultClasse = document.getElementById("resultadoClasse");
             resultClasse.innerHTML = "<hr /><h3 style='color:red' >Verifique o IP</h3>";
         }
 
