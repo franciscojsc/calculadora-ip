@@ -255,23 +255,23 @@ function converteDecimal(binario) {
 //const cidr = "24"
 
 // ----- Campos do index.html -----
-const botao = document.getElementById("botao");
-const resultado = document.getElementById("resultado")
+const $botao = document.getElementById("botao");
+const $resultado = document.getElementById("resultado")
 // --------------------------------
 
-botao.onclick = function () {
+$botao.onclick = function () {
     // ----- Campos do index.html -----
-    const ip = document.getElementById("ip").value;
-    const mascara = document.getElementById("mascara").value;
-    const cidr = document.getElementById("mascaraCIDR").value;
+    const $ip = document.getElementById("ip").value;
+    let $mascara = document.getElementById("mascara").value;
+    const $cidr = document.getElementById("mascaraCIDR").value;
     // --------------------------------
 
-    if (!mascara) {
-        mascara = converteDecimal(notacaoCIDR(cidr));
+    if (!$mascara) {
+        $mascara = converteDecimal(notacaoCIDR($cidr));
     }
 
-    const ipDecimal = separarOcteto(ip);
-    const mascaraDecimal = separarOcteto(mascara);
+    const ipDecimal = separarOcteto($ip);
+    const mascaraDecimal = separarOcteto($mascara);
 
     // converte ip em binário 
     const octeto1ip = verificarOcteto(parseInt(ipDecimal[0]).toString(2));
@@ -288,32 +288,32 @@ botao.onclick = function () {
     const ipBinario = unir(octeto1ip, octeto2ip, octeto3ip, octeto4ip);
     const mascaraBinario = unir(octeto1mascara, octeto2mascara, octeto3mascara, octeto4mascara);
 
-    if (validarIp(ip, ipDecimal)) {
+    if (validarIp($ip, ipDecimal)) {
         if (validarMascara(octeto1ip, mascaraDecimal)) {
 
-            const resultClasse = document.getElementById("resultadoClasse");
-            const resultIP = document.getElementById("resultadoIP");
-            const resultMascara = document.getElementById("resultadoMascara");
-            const resultRede = document.getElementById("resultadoRede");
-            const resultBroadcast = document.getElementById("resultadoBroadcast");
-            const resultQtdRede = document.getElementById("resultadoQtdRede");
-            const resultQtdHost = document.getElementById("resultadoQtdHost");
+            const $resultClasse = document.getElementById("resultadoClasse");
+            const $resultIP = document.getElementById("resultadoIP");
+            const $resultMascara = document.getElementById("resultadoMascara");
+            const $resultRede = document.getElementById("resultadoRede");
+            const $resultBroadcast = document.getElementById("resultadoBroadcast");
+            const $resultQtdRede = document.getElementById("resultadoQtdRede");
+            const $resultQtdHost = document.getElementById("resultadoQtdHost");
 
-            resultClasse.innerHTML = "<hr /><h5>Classe IP</h5><h5>" + verificarClasseIp(octeto1ip) + "</h5>";
-            resultIP.innerHTML = "<hr /><h5>Endereço IP</h5><h5>" + ip + "</h5><h5>" + ipBinario.toString() + "</h5>";
-            resultMascara.innerHTML = "<hr /><h5>Máscara</h5><h5>" + mascara + "</h5><h5>" + mascaraBinario.toString() + "</h5>";
-            resultRede.innerHTML = "<hr /><h5>Endereço de Rede</h5><h5>" + converteDecimal(verificarRede(ipBinario, mascaraBinario)).toString() + "</h5><h5>" + verificarRede(ipBinario, mascaraBinario) + "</h5>";
-            resultBroadcast.innerHTML = "<hr /><h5>Endereço de Broadcast</h5><h5>" + converteDecimal(verificarBroadcast(ipBinario, mascaraBinario)).toString() + "</h5><h5>" + verificarBroadcast(ipBinario, mascaraBinario) + "</h5>";
-            resultQtdRede.innerHTML = "<hr /><h5>Quantidade de rede/sub-rede</h5><h5>" + calcularSubrede(ipBinario, mascaraBinario).toString() + "</h5>";
-            resultQtdHost.innerHTML = "<hr /><h5>Quantidade de host por rede/sub-rede</h5><h5>" + calcularHost(mascaraBinario).toString() + "</h5>";
+            $resultClasse.innerHTML = "<hr /><h5>Classe IP</h5><h5>" + verificarClasseIp(octeto1ip) + "</h5>";
+            $resultIP.innerHTML = "<hr /><h5>Endereço IP</h5><h5>" + $ip + "</h5><h5>" + ipBinario.toString() + "</h5>";
+            $resultMascara.innerHTML = "<hr /><h5>Máscara</h5><h5>" + $mascara + "</h5><h5>" + mascaraBinario.toString() + "</h5>";
+            $resultRede.innerHTML = "<hr /><h5>Endereço de Rede</h5><h5>" + converteDecimal(verificarRede(ipBinario, mascaraBinario)).toString() + "</h5><h5>" + verificarRede(ipBinario, mascaraBinario) + "</h5>";
+            $resultBroadcast.innerHTML = "<hr /><h5>Endereço de Broadcast</h5><h5>" + converteDecimal(verificarBroadcast(ipBinario, mascaraBinario)).toString() + "</h5><h5>" + verificarBroadcast(ipBinario, mascaraBinario) + "</h5>";
+            $resultQtdRede.innerHTML = "<hr /><h5>Quantidade de rede/sub-rede</h5><h5>" + calcularSubrede(ipBinario, mascaraBinario).toString() + "</h5>";
+            $resultQtdHost.innerHTML = "<hr /><h5>Quantidade de host por rede/sub-rede</h5><h5>" + calcularHost(mascaraBinario).toString() + "</h5>";
 
         } else {
-            const resultClasse = document.getElementById("resultadoClasse");
-            resultClasse.innerHTML = "<hr /><h3 style='color:red' >Verifique a máscara</h3>";
+            const $resultClasse = document.getElementById("resultadoClasse");
+            $resultClasse.innerHTML = "<hr /><h3 style='color:red' >Verifique a máscara</h3>";
         }
     } else {
-        const resultClasse = document.getElementById("resultadoClasse");
-        resultClasse.innerHTML = "<hr /><h3 style='color:red' >Verifique o IP</h3>";
+        const $resultClasse = document.getElementById("resultadoClasse");
+        $resultClasse.innerHTML = "<hr /><h3 style='color:red' >Verifique o IP</h3>";
     }
 
 };
