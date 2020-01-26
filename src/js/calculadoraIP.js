@@ -1,3 +1,5 @@
+'use strict'
+
 window.onload = function () {
 
     function separarOcteto(decimal) {
@@ -8,7 +10,7 @@ window.onload = function () {
     function verificarOcteto(octeto) {
         var octetoAux = new String(octeto);
 
-        diferenca = Math.abs(octetoAux.length - 8);
+        var diferenca = Math.abs(octetoAux.length - 8);
 
         if (octetoAux.length < 8) {
             for (var i = 0; i < diferenca; i++) {
@@ -131,7 +133,7 @@ window.onload = function () {
     }
 
     function qtdBitsLigado(mascara) {
-        aux = 0;
+        var aux = 0;
 
         for (var i = 0; i < 35; i++) {
             if (mascara[i] == 1) {
@@ -146,7 +148,7 @@ window.onload = function () {
     }
 
     function qtdBitsDesligado(mascara) {
-        aux = 0;
+        var aux = 0;
 
         for (var i = 0; i < 35; i++) {
             if (mascara[i] == 0) {
@@ -179,7 +181,7 @@ window.onload = function () {
     }
 
     function validarMascara(octeto1IP, mascara) {
-       var regExp = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
+        var regExp = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
 
         if (regExp.test(unir(mascara[0], mascara[1], mascara[2], mascara[3]))) {
             switch (verificarClasseIp(octeto1IP)) {
@@ -201,37 +203,37 @@ window.onload = function () {
                         console.log("Máscara invalida!!!")
                         return false;
                     }
-                case 'B':
-                    if ((mascara[0] != "255") || (mascara[1] != "255")) {
-                        console.log("Máscara invalida!!!")
-                        return false;
-                    } else if ((mascara[2] >= "0" && mascara[2] <= "255") && mascara[3] == 0) {
-                        console.log("Máscara válida!!!")
-                        return true;
-                    } else if (mascara[2] == "255" && (mascara[3] >= 0 && mascara[3] <= 255)) {
-                        console.log("Máscara válida!!!")
-                        return true;
-                    } else {
-                        console.log("Máscara inválida!!!")
-                        return false;
-                    }
-                case 'C':
-                    if (((mascara[0] != "255") || (mascara[1] != "255")) || (mascara[2] != "255")) {
-                        console.log("Máscara invalida!!!")
-                        return false;
-                    } else if (mascara[3] >= 0 && mascara[3] <= 255) {
-                        console.log("Máscara válida!!!")
-                        return true;
-                    }
-                case 'D':
-                    console.log("IP para Multicast")
-                    return false;
-                case 'E':
-                    console.log("Reservada a testes pela IETF")
-                    return false;
-                default:
-                    console.log("Error!!!")
-                    return false;
+                    case 'B':
+                        if ((mascara[0] != "255") || (mascara[1] != "255")) {
+                            console.log("Máscara invalida!!!")
+                            return false;
+                        } else if ((mascara[2] >= "0" && mascara[2] <= "255") && mascara[3] == 0) {
+                            console.log("Máscara válida!!!")
+                            return true;
+                        } else if (mascara[2] == "255" && (mascara[3] >= 0 && mascara[3] <= 255)) {
+                            console.log("Máscara válida!!!")
+                            return true;
+                        } else {
+                            console.log("Máscara inválida!!!")
+                            return false;
+                        }
+                        case 'C':
+                            if (((mascara[0] != "255") || (mascara[1] != "255")) || (mascara[2] != "255")) {
+                                console.log("Máscara invalida!!!")
+                                return false;
+                            } else if (mascara[3] >= 0 && mascara[3] <= 255) {
+                                console.log("Máscara válida!!!")
+                                return true;
+                            }
+                            case 'D':
+                                console.log("IP para Multicast")
+                                return false;
+                            case 'E':
+                                console.log("Reservada a testes pela IETF")
+                                return false;
+                            default:
+                                console.log("Error!!!")
+                                return false;
             }
         } else {
             console.log("Máscara inválida!!!");
@@ -266,7 +268,7 @@ window.onload = function () {
         var cidr = document.getElementById("mascaraCIDR").value;
         // --------------------------------
 
-        if(!mascara){
+        if (!mascara) {
             mascara = converteDecimal(notacaoCIDR(cidr));
         }
 
@@ -299,7 +301,7 @@ window.onload = function () {
                 var resultQtdRede = document.getElementById("resultadoQtdRede");
                 var resultQtdHost = document.getElementById("resultadoQtdHost");
 
-                resultClasse.innerHTML = "<hr /><h5>Classe IP</h5><h5>" +verificarClasseIp(octeto1ip)  + "</h5>";
+                resultClasse.innerHTML = "<hr /><h5>Classe IP</h5><h5>" + verificarClasseIp(octeto1ip) + "</h5>";
                 resultIP.innerHTML = "<hr /><h5>Endereço IP</h5><h5>" + ip + "</h5><h5>" + ipBinario.toString() + "</h5>";
                 resultMascara.innerHTML = "<hr /><h5>Máscara</h5><h5>" + mascara + "</h5><h5>" + mascaraBinario.toString() + "</h5>";
                 resultRede.innerHTML = "<hr /><h5>Endereço de Rede</h5><h5>" + converteDecimal(verificarRede(ipBinario, mascaraBinario)).toString() + "</h5><h5>" + verificarRede(ipBinario, mascaraBinario) + "</h5>";
@@ -307,14 +309,14 @@ window.onload = function () {
                 resultQtdRede.innerHTML = "<hr /><h5>Quantidade de rede/sub-rede</h5><h5>" + calcularSubrede(ipBinario, mascaraBinario).toString() + "</h5>";
                 resultQtdHost.innerHTML = "<hr /><h5>Quantidade de host por rede/sub-rede</h5><h5>" + calcularHost(mascaraBinario).toString() + "</h5>";
 
-           }else{
+            } else {
                 var resultClasse = document.getElementById("resultadoClasse");
                 resultClasse.innerHTML = "<hr /><h3 style='color:red' >Verifique a máscara</h3>";
             }
-        }else{
+        } else {
             var resultClasse = document.getElementById("resultadoClasse");
             resultClasse.innerHTML = "<hr /><h3 style='color:red' >Verifique o IP</h3>";
         }
-        
+
     };
 };
