@@ -1,319 +1,227 @@
-'use strict'
+"use strict";
 
-function separarOcteto(decimal) {
-    return decimal.split(".");
+function verificarClasse(ip) {
+  ip = validarEntrada(ip);
+  return tipoClasse(primeiroOcteto(ip));
 }
 
-//verificar se está faltando digitos para completa o octeto
-function verificarOcteto(octeto) {
-    let octetoAux = new String(octeto);
+function validarEntrada(value) {
+  if (ehVazio(value)) {
+    throw new Error("Parse algum valor por parâmetro");
+  }
 
-    const diferenca = Math.abs(octetoAux.length - 8);
+  if (!ehString(value)) {
+    throw new Error("O parâmeto deve ser do tipo String");
+  }
 
-    if (octetoAux.length < 8) {
-        for (let i = 0; i < diferenca; i++) {
-            octetoAux = "0" + octetoAux;
-        }
-    }
-    return octetoAux;
+  value = value.trim();
+
+  if (!ehValidoMascaraOrIP(value)) {
+    throw new Error(
+      "Utilize pontos para separar os valores e não deixe espaços"
+    );
+  }
+
+  return value;
 }
 
-//verificar a classe ip, mas precisa da forma binária
-function verificarClasseIp(primeiroOcteto) {
-    const aux = new String(primeiroOcteto);
-
-    if (aux.slice(0, 1) == "0") {
-        return "A";
-    } else if (aux.slice(0, 2) == "10") {
-        return "B";
-    } else if (aux.slice(0, 3) == "110") {
-        return "C";
-    } else if (aux.slice(0, 4) == "1110") {
-        return "D";
-    } else if (aux.slice(0, 5) == "1111") {
-        return "E";
-    }
+function ehVazio(value) {
+  return !!!value;
 }
 
-function unir(octeto1, octeto2, octeto3, octeto4) {
-    return new String(octeto1 + "." + octeto2 + "." + octeto3 + "." + octeto4);
+function ehString(value) {
+  return typeof value === "string";
 }
 
+function ehValidoMascaraOrIP(value) {
+  const regExp = /^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][1-9]|2[0-5][0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][1-9]|2[0-5][0-5])$/;
+  return regExp.test(value);
+}
+
+function converterDecimalParaBinario(decimal) {
+  return (decimal >>> 0).toString(2);
+}
+
+function primeiroOcteto(value) {
+  value = value.split(".");
+  value = converterDecimalParaBinario(value[0]);
+  return preencherOcteto(value);
+}
+
+function preencherOcteto(value) {
+  return "00000000".slice(value.length) + value;
+}
+
+function tipoClasse(octeto) {
+  if (octeto.slice(0, 1) === "0") {
+    return "A";
+  } else if (octeto.slice(0, 2) === "10") {
+    return "B";
+  } else if (octeto.slice(0, 3) === "110") {
+    return "C";
+  } else if (octeto.slice(0, 4) === "1110") {
+    return "D";
+  } else if (octeto.slice(0, 4) === "1111") {
+    return "E";
+  }
+}
+
+function verificarMascara(mascara, classeIp) {
+  mascara = validarEntrada(mascara);
+
+  if (classeIp === "A") {
+    const regExp = /^(((255)\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|2[0-5][0-5]))\.0\.0)|((((255)\.){2}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|2[0-5][0-5]))\.0)|((((255)\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|2[0-5][0-5])))$/;
+    return regExp.test(mascara);
+  }
+
+  if (classeIp === "B") {
+    const regExp = /^((((255)\.){2}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|2[0-5][0-5]))\.0)|((((255)\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|2[0-5][0-5])))$/;
+    return regExp.test(mascara);
+  }
+
+  if (classeIp === "C") {
+    const regExp = /^((((255)\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|2[0-5][0-5])))$/;
+    return regExp.test(mascara);
+  }
+
+  return false;
+}
+
+/* 
+   Operação AND entre IP e Máscara
+*/
 function verificarRede(ip, mascara) {
-    let rede = new String();
+  ip = converterDecimalParaBinarioQuatroOctetos(ip);
+  mascara = converterDecimalParaBinarioQuatroOctetos(mascara);
 
-    for (let i = 0; i < 35; i++) {
-        //operção AND entre ip e máscara
-        if (ip.charAt(i) == '1' && mascara.charAt(i) == '1') {
-            rede += "1"
-        } else if ((ip.charAt(i) == '0' && mascara.charAt(i) == '1') || (ip.charAt(i) == '1' && mascara.charAt(i) == '0') || (ip.charAt(i) == '0' && mascara.charAt(i) == '0')) {
-            rede += "0"
-        } else {
-            rede += "."
-        }
+  let rede = "";
+
+  for (let i = 0; i < ip.length; i++) {
+    let ipBin = ip.charAt(i);
+    let mascaraBin = mascara.charAt(i);
+
+    if (ipBin === "." || mascaraBin === ".") {
+      rede += ipBin || mascaraBin;
+    } else {
+      rede += ipBin & mascaraBin;
     }
+  }
 
-    return rede;
+  return converteBinarioParaDecimalQuatroNumeros(rede);
 }
 
+/* 
+    Operação OR entre IP e o NOT da Máscara
+*/
 function verificarBroadcast(ip, mascara) {
-    let notMascara = new String();
+  ip = converterDecimalParaBinarioQuatroOctetos(ip);
+  mascara = negacaoBinariaQuatroOctetos(
+    converterDecimalParaBinarioQuatroOctetos(mascara)
+  );
 
-    for (let i = 0; i < 35; i++) {
-        //operção NOT na máscara
-        if (mascara.charAt(i) == '1') {
-            notMascara += "0"
-        } else if (mascara.charAt(i) == '0') {
-            notMascara += "1"
-        } else {
-            notMascara += "."
-        }
+  let broadcast = "";
+
+  for (let i = 0; i < ip.length; i++) {
+    let ipBin = ip.charAt(i);
+    let mascaraBin = mascara.charAt(i);
+
+    if (ipBin === "." || mascaraBin === ".") {
+      broadcast += ".";
+    } else {
+      broadcast += ipBin | mascaraBin;
     }
+  }
 
-    let broadcast = new String();
-
-    for (let i = 0; i < 35; i++) {
-        //operção OR entre ip e o not da máscara
-        if ((notMascara.charAt(i) == '1' && ip.charAt(i) == '1') || (notMascara.charAt(i) == '0' && ip.charAt(i) == '1') || (notMascara.charAt(i) == '1' && ip.charAt(i) == '0')) {
-            broadcast += "1"
-        } else if ((notMascara.charAt(i) == '0' && ip.charAt(i) == '0')) {
-            broadcast += "0"
-        } else {
-            broadcast += "."
-        }
-    }
-
-    return broadcast;
+  return converteBinarioParaDecimalQuatroNumeros(broadcast);
 }
 
-function notacaoCIDR(mascara) {
-    // exemplo /24
-
-    let mascaraCIDR = new String();
-
-    if (verificarNotacaoCIDR(mascara)) {
-        for (let i = 0; i < 35; i++) {
-            if (i == 8 || i == 17 || i == 26) {
-                mascaraCIDR += ".";
-                continue;
-            }
-            if (mascara != 0) {
-                mascaraCIDR += "1";
-                mascara--;
-            } else if (i > mascara) {
-                mascaraCIDR += "0";
-            }
-        }
-        return mascaraCIDR;
-    }
-
-    return "cidr error"
+function converterDecimalParaBinarioQuatroOctetos(value) {
+  value = value.split(".");
+  let octetos = preencherOcteto(converterDecimalParaBinario(value[0]));
+  octetos += "." + preencherOcteto(converterDecimalParaBinario(value[1]));
+  octetos += "." + preencherOcteto(converterDecimalParaBinario(value[2]));
+  octetos += "." + preencherOcteto(converterDecimalParaBinario(value[3]));
+  return octetos;
 }
 
-function verificarNotacaoCIDR(mascara) {
-    if (mascara > 0 && mascara <= 32) {
-        return true;
-    }
-    return false;
+function converterBinarioParaDecimal(value) {
+  return parseInt(value, 2);
 }
 
-function calcularSubrede(ip, mascara) {
-    switch (verificarClasseIp(ip)) {
-        case 'A':
-            return new Number(Math.pow(2, Math.abs(8 - qtdBitsLigado(mascara))));
-        case 'B':
-            return new Number(Math.pow(2, Math.abs(16 - qtdBitsLigado(mascara))));
-        case 'C':
-            return new Number(Math.pow(2, Math.abs(24 - qtdBitsLigado(mascara))));
-        default:
-            break;
+function converteBinarioParaDecimalQuatroNumeros(value) {
+  value = value.split(".");
+  let numeros = converterBinarioParaDecimal(value[0]);
+  numeros += "." + converterBinarioParaDecimal(value[1]);
+  numeros += "." + converterBinarioParaDecimal(value[2]);
+  numeros += "." + converterBinarioParaDecimal(value[3]);
+  return numeros;
+}
+
+function negacaoBinaria(value) {
+  return value === "1" ? "0" : "1";
+}
+
+function negacaoBinariaQuatroOctetos(value) {
+  let valueNegado = "";
+  for (let i = 0; i < value.length; i++) {
+    let valueBin = value.charAt(i);
+    if (valueBin === ".") {
+      valueNegado += valueBin;
+    } else {
+      valueNegado += negacaoBinaria(valueBin);
     }
+  }
+  return valueNegado;
+}
+
+function notacaoCIDR(value) {
+  let mascaraCIDR = "";
+
+  for (let i = 0; i < 32; i++) {
+    if (i < value) {
+      mascaraCIDR += "1";
+    } else {
+      mascaraCIDR += "0";
+    }
+  }
+
+  mascaraCIDR = converteBinarioParaDecimalQuatroNumeros(
+    formatarBinarioQuatroOctetos(mascaraCIDR)
+  );
+  return mascaraCIDR;
+}
+
+function formatarBinarioQuatroOctetos(value) {
+  let octeto = value.slice(0, 8);
+  octeto += "." + value.slice(8, 16);
+  octeto += "." + value.slice(16, 24);
+  octeto += "." + value.slice(24, 32);
+  return octeto;
+}
+
+function verificarSubrede(classeIp, mascara) {
+  mascara = converterDecimalParaBinarioQuatroOctetos(mascara);
+  switch (classeIp) {
+    case "A":
+      return Math.pow(2, Math.abs(8 - qtdBitsLigado(mascara)));
+    case "B":
+      return Math.pow(2, Math.abs(16 - qtdBitsLigado(mascara)));
+    case "C":
+      return Math.pow(2, Math.abs(24 - qtdBitsLigado(mascara)));
+    default:
+      throw new Error("Não foi possível calcular a subrede");
+  }
+}
+
+function verificarHost(mascara) {
+  mascara = converterDecimalParaBinarioQuatroOctetos(mascara);
+  return new Number(Math.pow(2, qtdBitsDesligado(mascara)) - 2);
 }
 
 function qtdBitsLigado(mascara) {
-    let aux = 0;
-
-    for (let i = 0; i < 35; i++) {
-        if (mascara[i] == 1) {
-            aux++;
-        }
-    }
-    return aux;
-}
-
-function calcularHost(mascara) {
-    return new Number(Math.pow(2, qtdBitsDesligado(mascara)) - 2);
+  return mascara.match(/1/g).length;
 }
 
 function qtdBitsDesligado(mascara) {
-    let aux = 0;
-
-    for (let i = 0; i < 35; i++) {
-        if (mascara[i] == 0) {
-            aux++;
-        }
-    }
-    return aux;
+  return mascara.match(/0/g).length;
 }
-
-function validarIp(ip, ipbase10) {
-
-    const regExp = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
-
-    if (regExp.test(ip)) {
-        if (ipbase10[0] == 0) {
-            return false;
-        } else
-        if (((ipbase10[0] > 0) && (ipbase10[0] <= 255) &&
-                (ipbase10[1] >= 0) && (ipbase10[1] <= 255)) &&
-            ((ipbase10[2] >= 0) && (ipbase10[2] <= 255) &&
-                (ipbase10[3] >= 0) && (ipbase10[3] <= 255))) {
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        console.log("Ip inválido!!!")
-        return false;
-    }
-}
-
-function validarMascara(octeto1IP, mascara) {
-    const regExp = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
-
-    if (regExp.test(unir(mascara[0], mascara[1], mascara[2], mascara[3]))) {
-        switch (verificarClasseIp(octeto1IP)) {
-            case 'A':
-
-                if (mascara[0] != "255") {
-                    console.log("Máscara inválida!!!")
-                    return false;
-                } else if ((mascara[1] >= 0 && mascara[1] <= 255) && (mascara[2] == '0' && mascara[3] == '0')) {
-                    console.log("Máscara válida!!!")
-                    return true;
-                } else if ((mascara[1] == 255 && (mascara[2] >= 0 && mascara[2] <= 255)) && mascara[3] == 0) {
-                    console.log("Máscara válida!!!");
-                    return true;
-                } else if ((mascara[1] == 255 && mascara[2] == 255) && (mascara[3] >= 0 && mascara[3] <= 255)) {
-                    console.log("Máscara válida!!!");
-                    return true;
-                } else {
-                    console.log("Máscara invalida!!!")
-                    return false;
-                }
-                case 'B':
-                    if ((mascara[0] != "255") || (mascara[1] != "255")) {
-                        console.log("Máscara invalida!!!")
-                        return false;
-                    } else if ((mascara[2] >= "0" && mascara[2] <= "255") && mascara[3] == 0) {
-                        console.log("Máscara válida!!!")
-                        return true;
-                    } else if (mascara[2] == "255" && (mascara[3] >= 0 && mascara[3] <= 255)) {
-                        console.log("Máscara válida!!!")
-                        return true;
-                    } else {
-                        console.log("Máscara inválida!!!")
-                        return false;
-                    }
-                    case 'C':
-                        if (((mascara[0] != "255") || (mascara[1] != "255")) || (mascara[2] != "255")) {
-                            console.log("Máscara invalida!!!")
-                            return false;
-                        } else if (mascara[3] >= 0 && mascara[3] <= 255) {
-                            console.log("Máscara válida!!!")
-                            return true;
-                        }
-                        case 'D':
-                            console.log("IP para Multicast")
-                            return false;
-                        case 'E':
-                            console.log("Reservada a testes pela IETF")
-                            return false;
-                        default:
-                            console.log("Error!!!")
-                            return false;
-        }
-    } else {
-        console.log("Máscara inválida!!!");
-        return false;
-    }
-
-}
-
-function converteDecimal(binario) {
-    const binarioSeparado = separarOcteto(binario);
-    const decimal = new Array();
-
-    for (let i = 0; i < binarioSeparado.length; i++) {
-        decimal.push(parseInt(binarioSeparado[i], 2).toString());
-    }
-    return unir(decimal[0], decimal[1], decimal[2], decimal[3]);
-}
-
-//const ip = "192.168.64.1";
-//const mascara = "255.255.255.0";
-//const cidr = "24"
-
-// ----- Campos do index.html -----
-const $botao = document.getElementById("botao");
-const $resultado = document.getElementById("resultado")
-// --------------------------------
-
-$botao.onclick = function () {
-    // ----- Campos do index.html -----
-    const $ip = document.getElementById("ip").value;
-    let $mascara = document.getElementById("mascara").value;
-    const $cidr = document.getElementById("mascaraCIDR").value;
-    // --------------------------------
-
-    if (!$mascara) {
-        $mascara = converteDecimal(notacaoCIDR($cidr));
-    }
-
-    const ipDecimal = separarOcteto($ip);
-    const mascaraDecimal = separarOcteto($mascara);
-
-    // converte ip em binário 
-    const octeto1ip = verificarOcteto(parseInt(ipDecimal[0]).toString(2));
-    const octeto2ip = verificarOcteto(parseInt(ipDecimal[1]).toString(2));
-    const octeto3ip = verificarOcteto(parseInt(ipDecimal[2]).toString(2));
-    const octeto4ip = verificarOcteto(parseInt(ipDecimal[3]).toString(2));
-
-    // converte máscara em binário 
-    const octeto1mascara = verificarOcteto(parseInt(mascaraDecimal[0]).toString(2));
-    const octeto2mascara = verificarOcteto(parseInt(mascaraDecimal[1]).toString(2));
-    const octeto3mascara = verificarOcteto(parseInt(mascaraDecimal[2]).toString(2));
-    const octeto4mascara = verificarOcteto(parseInt(mascaraDecimal[3]).toString(2));
-
-    const ipBinario = unir(octeto1ip, octeto2ip, octeto3ip, octeto4ip);
-    const mascaraBinario = unir(octeto1mascara, octeto2mascara, octeto3mascara, octeto4mascara);
-
-    if (validarIp($ip, ipDecimal)) {
-        if (validarMascara(octeto1ip, mascaraDecimal)) {
-
-            const $resultClasse = document.getElementById("resultadoClasse");
-            const $resultIP = document.getElementById("resultadoIP");
-            const $resultMascara = document.getElementById("resultadoMascara");
-            const $resultRede = document.getElementById("resultadoRede");
-            const $resultBroadcast = document.getElementById("resultadoBroadcast");
-            const $resultQtdRede = document.getElementById("resultadoQtdRede");
-            const $resultQtdHost = document.getElementById("resultadoQtdHost");
-
-            $resultClasse.innerHTML = "<hr /><h5>Classe IP</h5><h5>" + verificarClasseIp(octeto1ip) + "</h5>";
-            $resultIP.innerHTML = "<hr /><h5>Endereço IP</h5><h5>" + $ip + "</h5><h5>" + ipBinario.toString() + "</h5>";
-            $resultMascara.innerHTML = "<hr /><h5>Máscara</h5><h5>" + $mascara + "</h5><h5>" + mascaraBinario.toString() + "</h5>";
-            $resultRede.innerHTML = "<hr /><h5>Endereço de Rede</h5><h5>" + converteDecimal(verificarRede(ipBinario, mascaraBinario)).toString() + "</h5><h5>" + verificarRede(ipBinario, mascaraBinario) + "</h5>";
-            $resultBroadcast.innerHTML = "<hr /><h5>Endereço de Broadcast</h5><h5>" + converteDecimal(verificarBroadcast(ipBinario, mascaraBinario)).toString() + "</h5><h5>" + verificarBroadcast(ipBinario, mascaraBinario) + "</h5>";
-            $resultQtdRede.innerHTML = "<hr /><h5>Quantidade de rede/sub-rede</h5><h5>" + calcularSubrede(ipBinario, mascaraBinario).toString() + "</h5>";
-            $resultQtdHost.innerHTML = "<hr /><h5>Quantidade de host por rede/sub-rede</h5><h5>" + calcularHost(mascaraBinario).toString() + "</h5>";
-
-        } else {
-            const $resultClasse = document.getElementById("resultadoClasse");
-            $resultClasse.innerHTML = "<hr /><h3 style='color:red' >Verifique a máscara</h3>";
-        }
-    } else {
-        const $resultClasse = document.getElementById("resultadoClasse");
-        $resultClasse.innerHTML = "<hr /><h3 style='color:red' >Verifique o IP</h3>";
-    }
-
-};
