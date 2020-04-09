@@ -6,6 +6,7 @@
 
 body{
     font-family: 'Open Sans', sans-serif;
+    font-family: 'Rubik', sans-serif;
 }
 
 a{
@@ -15,3 +16,7 @@ a{
 ul, ol, li{
     list-style: none; 
 }
+
+input, input::placeholder {
+    font-family: 'IBM Plex Mono', monospace;
+} 
