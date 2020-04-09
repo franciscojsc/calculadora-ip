@@ -3,7 +3,7 @@ section {
 }
 
 input {
-    width: 90%;
+    width: 100%;
     height: 60px;
     color: #333;
     border: 1px solid #dcdce6;
@@ -60,4 +60,9 @@ button {
         flex-direction: row;
         justify-content: space-around;
     }
+
+    .inputData {
+        padding-right: 5%;
+    }
+    
   }
