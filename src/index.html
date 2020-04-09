@@ -16,28 +16,29 @@
         <h1>Calculadora IP</h1>
     </header>
 
-    <fieldset>
-        <h3>Digite o IP</h3>
-        <input type="text" placeholder="Ex:192.168.0.100" pattern="\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}$" maxlength="15" id="ip" />
-        <br />
-        <h3>Digite a máscara</h3>
-        <input type="text" placeholder="Ex:255.255.255.0" pattern="\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}$" maxlength="15" id="mascara"/>
-        <p>ou</p>
-        <span>/</span>
-        <input type="text" name="mascaraCIDR" placeholder="Ex:/24" pattern="\d{1,2}$" maxlength="2" id="mascaraCIDR" \>
-        <br />
-        <br /> 
-        <input type="button"  name="botao" value="calcular" id="botao" \>
-
-        <div id="resultadoClasse"></div>
-        <div id="resultadoIP"></div>
-        <div id="resultadoMascara"></div>
-        <div id="resultadoRede"></div>
-        <div id="resultadoBroadcast"></div>
-        <div id="resultadoQtdRede"></div>
-        <div id="resultadoQtdHost"></div>
-        
-    </fieldset>
+    <main>
+        <section class="inputData">
+            <form>
+                <h2>Digite o IP</h2>
+                <input type="text" placeholder="Ex:192.168.0.100" pattern="^(\d{1,3}\.){3}\d{1,3}$" maxlength="15" title="Formato decimal incluído os pontos" id="ip" />
+                <h2>Digite a máscara</h2>
+                <input type="text" placeholder="Ex:255.255.255.0" pattern="^[0-9]{1,3}[.]{1}[0-9]{1,3}[.]{1}[0-9]{1,3}[.]{1}[0-9]{1,3}$" maxlength="15" title="Formato decimal incluído os pontos" id="mascara"/>
+                <p>ou</p>
+                <input type="number" name="mascaraCIDR" placeholder="Ex:/24" pattern="^\d{1,2}$" maxlength="2" title="1 ou 2 dígitos" id="mascaraCIDR" />
+                </br>
+                <button>Calcular</button>
+              </form>
+        </section>
+        <section class="result">
+            <div id="resultadoClasse"></div>
+            <div id="resultadoIP"></div>
+            <div id="resultadoMascara"></div>
+            <div id="resultadoRede"></div>
+            <div id="resultadoBroadcast"></div>
+            <div id="resultadoQtdRede"></div>
+            <div id="resultadoQtdHost"></div>
+        </section>
+    </main>
 
     <script type="text/javascript" src="./js/calculadoraIP.js"></script>
     <script type="text/javascript" src="./js/script.js"></script>

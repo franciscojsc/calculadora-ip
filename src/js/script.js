@@ -1,6 +1,6 @@
 "use strict";
 
-const $botao = document.getElementById("botao");
+const $form = document.querySelector("form");
 
 const $resultClasse = document.getElementById("resultadoClasse");
 const $resultIP = document.getElementById("resultadoIP");
@@ -14,7 +14,8 @@ const $ip = document.getElementById("ip");
 const $mascara = document.getElementById("mascara");
 const $mascaraCIDR = document.getElementById("mascaraCIDR");
 
-$botao.addEventListener("click", function() {
+$form.addEventListener("submit", function(e) {
+  e.preventDefault();
   try {
     if (!!$mascaraCIDR.value) {
       $mascara.value = notacaoCIDR($mascaraCIDR.value);
