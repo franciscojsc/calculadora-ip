@@ -28,27 +28,55 @@ $form.addEventListener("submit", function(e) {
     const subrede = verificarSubrede(classe, $mascara.value);
 
     if (mascara === true) {
-      $resultClasse.innerHTML = `<hr /><h5>Classe</h5><h5>${classe}</h5>`;
-      $resultIP.innerHTML = `<hr /><h5>IP</h5><h5>${
-        $ip.value
-      }</h5><h5>${converterDecimalParaBinarioQuatroOctetos($ip.value)}</h5>`;
-      $resultMascara.innerHTML = `<hr /><h5>Máscara</h5><h5>${
-        $mascara.value
-      }</h5><h5>${converterDecimalParaBinarioQuatroOctetos(
-        $mascara.value
-      )}</h5>`;
-      $resultRede.innerHTML = `<hr /><h5>Endereço de Rede</h5><h5>${rede}</h5><h5>${converterDecimalParaBinarioQuatroOctetos(
-        rede
-      )}</h5>`;
-      $resultBroadcast.innerHTML = `<hr /><h5>Endereço de Broadcast</h5><h5>${broadcast}</h5><h5>${converterDecimalParaBinarioQuatroOctetos(
-        broadcast
-      )}</h5>`;
-      $resultQtdRede.innerHTML = `<hr /><h5>Quantidade de rede/sub-rede</h5><h5>${subrede}</h5>`;
-      $resultQtdHost.innerHTML = `<hr /><h5>Quantidade de host por rede/sub-rede</h5><h5>${host}</h5>`;
+      $resultClasse.innerHTML = `
+      <div class="card">
+        <p>Classe</p>
+        <p>${classe}</p>
+      </div>`;
+      
+      $resultIP.innerHTML = `
+      <div class="card">
+        <p>IP</p>
+        <p>${$ip.value}</p>
+        <p>${converterDecimalParaBinarioQuatroOctetos($ip.value)}</p>
+      </div>`;
+
+      $resultMascara.innerHTML = `
+      <div class="card">
+        <p>Máscara</p>
+        <p>${$mascara.value}</p>
+        <p>${converterDecimalParaBinarioQuatroOctetos($mascara.value)}</p>
+      </div>`;
+
+      $resultRede.innerHTML = `
+      <div class="card">
+        <p>Endereço de Rede</p>
+        <p>${rede}</p>
+        <p>${converterDecimalParaBinarioQuatroOctetos(rede)}</p>
+      </div>`;
+
+      $resultBroadcast.innerHTML = `
+      <div class="card">
+        <p>Endereço de Broadcast</p>
+        <p>${broadcast}</p>
+        <p>${converterDecimalParaBinarioQuatroOctetos(broadcast)}</p>
+      </div>`;
+
+      $resultQtdRede.innerHTML = `
+      <div class="card">
+        <p>Quantidade de rede/sub-rede</p>
+        <p>${subrede}</p>
+      </div>`;
+
+      $resultQtdHost.innerHTML = `
+      <div class="card">
+        <p>Quantidade de host por rede/sub-rede</p>
+        <p>${host}</p>
+      </div>`;
+        
     } else {
       const $resultClasse = document.getElementById("resultadoClasse");
-      $resultClasse.innerHTML =
-        "<hr /><h3 style='color:red' >Verifique a máscara</h3>";
+      $resultClasse.innerHTML = "<div class='card'><p style='color:red' >Verifique a máscara</p></div>";
     }
   } catch (error) {
     console.log(error);
