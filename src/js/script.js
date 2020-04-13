@@ -27,58 +27,62 @@ $form.addEventListener("submit", function(e) {
     const host = verificarHost($mascara.value);
     const subrede = verificarSubrede(classe, $mascara.value);
 
-    if (mascara === true) {
-      $resultClasse.innerHTML = `
-      <div class="card">
-        <p>Classe</p>
-        <p>${classe}</p>
-      </div>`;
+    /* section result */
       
-      $resultIP.innerHTML = `
-      <div class="card">
-        <p>IP</p>
-        <p>${$ip.value}</p>
-        <p>${converterDecimalParaBinarioQuatroOctetos($ip.value)}</p>
-      </div>`;
+    const $secaoDeEntrada = document.querySelector('section');
+    $secaoDeEntrada.insertAdjacentHTML('afterend', `<section class="result"></section>`);
+     
+    /* card */
 
-      $resultMascara.innerHTML = `
-      <div class="card">
-        <p>Máscara</p>
-        <p>${$mascara.value}</p>
-        <p>${converterDecimalParaBinarioQuatroOctetos($mascara.value)}</p>
-      </div>`;
+    const $secaoResultado = document.querySelector('.result');
 
-      $resultRede.innerHTML = `
-      <div class="card">
-        <p>Endereço de Rede</p>
-        <p>${rede}</p>
-        <p>${converterDecimalParaBinarioQuatroOctetos(rede)}</p>
-      </div>`;
+    $secaoResultado.insertAdjacentHTML('beforeend', `
+    <div class="card">
+      <p>Classe</p>
+      <p>${classe}</p>
+    </div>`);
+    
+    $secaoResultado.insertAdjacentHTML('beforeend', `
+    <div class="card">
+      <p>IP</p>
+      <p>${$ip.value}</p>
+      <p>${converterDecimalParaBinarioQuatroOctetos($ip.value)}</p>
+    </div>`);
 
-      $resultBroadcast.innerHTML = `
-      <div class="card">
-        <p>Endereço de Broadcast</p>
-        <p>${broadcast}</p>
-        <p>${converterDecimalParaBinarioQuatroOctetos(broadcast)}</p>
-      </div>`;
+    $secaoResultado.insertAdjacentHTML('beforeend', `
+    <div class="card">
+      <p>Máscara</p>
+      <p>${$mascara.value}</p>
+      <p>${converterDecimalParaBinarioQuatroOctetos($mascara.value)}</p>
+    </div>`);
 
-      $resultQtdRede.innerHTML = `
-      <div class="card">
-        <p>Quantidade de rede/sub-rede</p>
-        <p>${subrede}</p>
-      </div>`;
+    $secaoResultado.insertAdjacentHTML('beforeend', `
+    <div class="card">
+      <p>Endereço de Rede</p>
+      <p>${rede}</p>
+      <p>${converterDecimalParaBinarioQuatroOctetos(rede)}</p>
+    </div>`);
 
-      $resultQtdHost.innerHTML = `
-      <div class="card">
-        <p>Quantidade de host por rede/sub-rede</p>
-        <p>${host}</p>
-      </div>`;
+    $secaoResultado.insertAdjacentHTML('beforeend', `
+    <div class="card">
+      <p>Endereço de Broadcast</p>
+      <p>${broadcast}</p>
+      <p>${converterDecimalParaBinarioQuatroOctetos(broadcast)}</p>
+    </div>`);
+
+    $secaoResultado.insertAdjacentHTML('beforeend', `
+    <div class="card">
+      <p>Quantidade de rede/sub-rede</p>
+      <p>${subrede}</p>
+    </div>`);
+
+    $secaoResultado.insertAdjacentHTML('beforeend', `
+    <div class="card">
+      <p>Quantidade de host por rede/sub-rede</p>
+      <p>${host}</p>
+    </div>`);
         
-    } else {
-      const $resultClasse = document.getElementById("resultadoClasse");
-      $resultClasse.innerHTML = "<div class='card'><p style='color:red' >Verifique a máscara</p></div>";
-    }
   } catch (error) {
-    console.log(error);
+    alert("ERRO: Verifique os valores inseridos");
   }
 });
