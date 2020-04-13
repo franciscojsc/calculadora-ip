@@ -86,9 +86,9 @@ button {
         flex-direction: row;
         justify-content: space-around;
     }
-
-    .inputData {
-        padding-right: 5%;
+    
+    section {
+        margin: 0 15px;
     }
     
   }
