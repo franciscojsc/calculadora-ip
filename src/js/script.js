@@ -2,14 +2,6 @@
 
 const $form = document.querySelector("form");
 
-const $resultClasse = document.getElementById("resultadoClasse");
-const $resultIP = document.getElementById("resultadoIP");
-const $resultMascara = document.getElementById("resultadoMascara");
-const $resultRede = document.getElementById("resultadoRede");
-const $resultBroadcast = document.getElementById("resultadoBroadcast");
-const $resultQtdRede = document.getElementById("resultadoQtdRede");
-const $resultQtdHost = document.getElementById("resultadoQtdHost");
-
 const $ip = document.getElementById("ip");
 const $mascara = document.getElementById("mascara");
 const $mascaraCIDR = document.getElementById("mascaraCIDR");
@@ -26,6 +18,8 @@ $form.addEventListener("submit", function(e) {
     const broadcast = verificarBroadcast($ip.value, $mascara.value);
     const host = verificarHost($mascara.value);
     const subrede = verificarSubrede(classe, $mascara.value);
+
+    limparCampos();
 
     /* section result */
       
@@ -83,6 +77,11 @@ $form.addEventListener("submit", function(e) {
     </div>`);
         
   } catch (error) {
+    limparCampos();
     alert("ERRO: Verifique os valores inseridos");
   }
 });
+
+function limparCampos(){
+  document.querySelector('.result') ? document.querySelector('.result').remove() : "";
+}
