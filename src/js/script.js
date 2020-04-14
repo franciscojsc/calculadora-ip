@@ -8,6 +8,9 @@ const $mascaraCIDR = document.getElementById("mascaraCIDR");
 
 $form.addEventListener("submit", function(e) {
   e.preventDefault();
+
+  limparCampos();
+
   try {
     if (!!$mascaraCIDR.value) {
       $mascara.value = notacaoCIDR($mascaraCIDR.value);
@@ -18,8 +21,6 @@ $form.addEventListener("submit", function(e) {
     const broadcast = verificarBroadcast($ip.value, $mascara.value);
     const host = verificarHost($mascara.value);
     const subrede = verificarSubrede(classe, $mascara.value);
-
-    limparCampos();
 
     /* section result */
       
@@ -45,7 +46,6 @@ $form.addEventListener("submit", function(e) {
     $secaoResultado.insertAdjacentHTML('beforeend', criarCard('Quantidade de host por rede/sub-rede', host));
         
   } catch (error) {
-    limparCampos();
     alert("ERRO: Verifique os valores inseridos");
   }
 });
