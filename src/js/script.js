@@ -30,51 +30,19 @@ $form.addEventListener("submit", function(e) {
 
     const $secaoResultado = document.querySelector('.result');
 
-    $secaoResultado.insertAdjacentHTML('beforeend', `
-    <div class="card">
-      <p>Classe</p>
-      <p>${classe}</p>
-    </div>`);
+    $secaoResultado.insertAdjacentHTML('beforeend', criarCard('Classe', classe));
     
-    $secaoResultado.insertAdjacentHTML('beforeend', `
-    <div class="card">
-      <p>IP</p>
-      <p>${$ip.value}</p>
-      <p>${converterDecimalParaBinarioQuatroOctetos($ip.value)}</p>
-    </div>`);
+    $secaoResultado.insertAdjacentHTML('beforeend', criarCard('IP', ip.value, converterDecimalParaBinarioQuatroOctetos($ip.value)));
 
-    $secaoResultado.insertAdjacentHTML('beforeend', `
-    <div class="card">
-      <p>Máscara</p>
-      <p>${$mascara.value}</p>
-      <p>${converterDecimalParaBinarioQuatroOctetos($mascara.value)}</p>
-    </div>`);
+    $secaoResultado.insertAdjacentHTML('beforeend', criarCard('Máscara', $mascara.value, converterDecimalParaBinarioQuatroOctetos($mascara.value)));
 
-    $secaoResultado.insertAdjacentHTML('beforeend', `
-    <div class="card">
-      <p>Endereço de Rede</p>
-      <p>${rede}</p>
-      <p>${converterDecimalParaBinarioQuatroOctetos(rede)}</p>
-    </div>`);
+    $secaoResultado.insertAdjacentHTML('beforeend', criarCard('Endereço de Rede', rede, converterDecimalParaBinarioQuatroOctetos(rede)));
 
-    $secaoResultado.insertAdjacentHTML('beforeend', `
-    <div class="card">
-      <p>Endereço de Broadcast</p>
-      <p>${broadcast}</p>
-      <p>${converterDecimalParaBinarioQuatroOctetos(broadcast)}</p>
-    </div>`);
+    $secaoResultado.insertAdjacentHTML('beforeend', criarCard('Endereço de Broadcast', broadcast, converterDecimalParaBinarioQuatroOctetos(rede)));
+    
+    $secaoResultado.insertAdjacentHTML('beforeend', criarCard('Quantidade de rede/sub-rede', subrede));
 
-    $secaoResultado.insertAdjacentHTML('beforeend', `
-    <div class="card">
-      <p>Quantidade de rede/sub-rede</p>
-      <p>${subrede}</p>
-    </div>`);
-
-    $secaoResultado.insertAdjacentHTML('beforeend', `
-    <div class="card">
-      <p>Quantidade de host por rede/sub-rede</p>
-      <p>${host}</p>
-    </div>`);
+    $secaoResultado.insertAdjacentHTML('beforeend', criarCard('Quantidade de host por rede/sub-rede', host));
         
   } catch (error) {
     limparCampos();
@@ -84,4 +52,19 @@ $form.addEventListener("submit", function(e) {
 
 function limparCampos(){
   document.querySelector('.result') ? document.querySelector('.result').remove() : "";
+}
+
+function criarCard(texto, valor1, valor2) {
+  if (!!valor2) {
+    return `<div class="card">
+              <p>${texto}</p>
+              <p>${valor1}</p>
+              <p>${valor2}</p>
+            </div>`
+  } else {
+    return `<div class="card">
+              <p>${texto}</p>
+              <p>${valor1}</p>
+            </div>`
+  }
 }
