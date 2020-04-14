@@ -46,7 +46,11 @@ $form.addEventListener("submit", function(e) {
     $secaoResultado.insertAdjacentHTML('beforeend', criarCard('Quantidade de host por rede/sub-rede', host));
         
   } catch (error) {
-    alert("ERRO: Verifique os valores inseridos");
+    document.querySelector('body').insertAdjacentHTML('beforeend', 
+    `<div class="result alert warning">
+      <p>Verifique os valores inseridos</p>
+    </div>`
+    )
   }
 });
 
