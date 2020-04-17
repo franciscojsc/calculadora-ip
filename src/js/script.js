@@ -39,7 +39,7 @@ $form.addEventListener("submit", function(e) {
 
     $secaoResultado.insertAdjacentHTML('beforeend', criarCard('Endereço de Rede', rede, converterDecimalParaBinarioQuatroOctetos(rede)));
 
-    $secaoResultado.insertAdjacentHTML('beforeend', criarCard('Endereço de Broadcast', broadcast, converterDecimalParaBinarioQuatroOctetos(rede)));
+    $secaoResultado.insertAdjacentHTML('beforeend', criarCard('Endereço de Broadcast', broadcast, converterDecimalParaBinarioQuatroOctetos(broadcast)));
     
     $secaoResultado.insertAdjacentHTML('beforeend', criarCard('Quantidade de rede/sub-rede', subrede));
 
